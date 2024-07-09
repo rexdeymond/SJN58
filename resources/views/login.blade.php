@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 
 <html
   lang="en"
@@ -86,7 +86,6 @@
               class="my-5 auth-illustration"
               data-app-light-img="illustrations/auth-login-illustration-light.png"
               data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
-
             <img
               src="../assets/img/illustrations/bg-shape-image-light.png"
               alt="auth-login-cover"
@@ -99,6 +98,7 @@
 
         <!-- Login -->
         <div class="d-flex col-12 col-lg-4 align-items-center authentication-bg p-sm-12 p-6">
+
                 <div class="w-px-400 mx-auto mt-12 pt-5">
                     <div class="alert alert-solid-danger d-flex align-items-center">
                         <span class="alert-icon rounded">

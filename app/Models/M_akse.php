@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class M_akse extends Model
 {
     use HasFactory;
+
+    protected $table = 'm_keyxs';
+    protected $primary_key = 'noid';
 }

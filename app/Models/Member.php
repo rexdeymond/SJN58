@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'noid';
+    public static function all(){
+
+    };
+     protected $table = 'members';
+     protected $primaryKey = 'noid';
 }

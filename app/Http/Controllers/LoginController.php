@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
+use App\Models\M_akse;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ class LoginController extends Controller
             return redirect()->intended('/office');
         }
 
-        return back()->with('message', 'Login gagal');
+        return back()->session()->flash('message', 'Login gagal');
     }
 
     /*public function index()
