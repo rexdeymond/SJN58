@@ -1,0 +1,355 @@
+<?php 
+$vnoid=isset($_GET['noid'])?$_GET['noid']:(isset($_POST['noid'])?$_POST['noid']:"");//noid
+
+$sqlprf="SELECT m.*,(SELECT AES_DECRYPT (a.pass, concat(a.noid,'ganteng')) FROM member_akses a WHERE a.noid=m.noid)pw,fnGetMemberJarUpline(m.noid,1,0) upline,fnGetMemberJarSponsor(m.noid,1) sponsor from vwmember m where m.noid='".$vnoid."' ";
+require_once("../include/koneksi.php");
+$rsprf = mysqli_fetch_assoc(mysqli_query($conn,$sqlprf)) or die(mysqli_error($conn));
+?>
+					<div class="row">
+                        <div class="col-md-12">
+                            
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Update Profil</strong></h3>
+                                    <ul class="panel-controls">
+										<li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+										<li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
+										<li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <p>Isilah identitas Anda dengan benar.</p>
+
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6">
+<form class="upload" name="frmupload" method="post" encType="multipart/form-data">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Foto</label>
+                                                <div class="col-md-9">    
+													<div id="output" class="col-md-7" style="max-height:300px;min-height:150px;border:1px dashed;overflow: hidden;"><?php 
+														include("ajax/displaypicture.php");
+													?>
+
+															<div id="progressbar" class="col-md-12 progress-bar progress-bar-striped active hidden"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">45%</div>                      
+   
+													</div>                                                  
+                                                    <div class="col-md-5"><input type="hidden" class="form-control" name="hdnnoid" value="<?=$rsprf['noid']!=""?$rsprf['noid']:""?>"/><input type="file" class="fileinput btn-primary" name="pictures" id="pictures" title="Browse file" onchange="uploadFile()" /></div>
+                                                    <div class="col-md-12"><span class="help-block">Upload File Gambar</span></div>
+                                                </div>
+                                            </div>
+										</form>
+                            <form class="form-horizontal" name="frmprofil" id="frmprofil" onsubmit="return SaveProfil()">
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Nama</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-user"></span></span><input type="hidden" class="form-control" name="hdnnoid" value="<?=$rsprf['noid']!=""?$rsprf['noid']:""?>"/>
+                                                        <input type="text" class="form-control" name="txtnama" value="<?=$rsprf['noid']!=""?$rsprf['nama']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Isilah nama lengkap Anda sesuai KTP</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">No KTP</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-credit-card"></span></span>
+                                                        <input type="text" class="form-control" name="txtnoiden" value="<?=$rsprf['noid']!=""?$rsprf['noiden']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Nomor KTP yang masih berlaku</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Propinsi</label>
+                                                <div class="col-md-9">                                                                                            
+													<select class="form-control select" name="slcpropinsi" id="slcpropinsi" onchange="showKota()">
+													<option value=""><i>Pilih Provinsi : </i></option>
+														<?php
+														$sqlstate = "select * from propinsi order by propinsi";
+														$execstate = mysqli_query($conn,$sqlstate);
+														while($rsstate = $execstate->fetch_assoc())
+														{
+															?>
+															<option value="<?=$rsstate['propinsi']?>" <?$rsstate['propinsi']==$rsprf['propinsi']?" selected='selected' ":""?> <?=$rsstate['propinsi']?></option>
+															<?php
+														}
+														?>
+													</select>
+                                                    <span class="help-block">Pilih Propinsi</span>
+                                                </div>
+                                            </div>
+ 
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Kota/Kabupaten</label>
+                                                <div class="col-md-9">                                                                                            
+				<div id="kota">
+					<?php
+					if(isset($rsprf['noid']))
+					{
+					?>
+						<select class="form-control select" name="slckota" id="slckota" onchange="showKecamatan()">
+							<option value="">Pilih Kota : </option>
+							<?php
+								$sqlcity = "SELECT kota.kota FROM kota,propinsi WHERE kota.propinsi_id = propinsi.propinsi_id and propinsi.propinsi=\"".$rsprf['propinsi']."\" order by SUBSTRING( `kota` , 6 )";
+								$execity = mysqli_query($conn,$sqlcity);
+								while($rscity = $execity->fetch_assoc())
+								{
+									if($rscity['kota']==$rsprf['kota'])
+									{
+										$selected = "SELECTED";
+									}
+									else
+									{
+										$selected = "";
+									}
+									?>
+									<option <?=$selected?> value="<?=$rscity['kota']?>"><?=$rscity['kota']?></option>
+									<?php
+								}
+							?>
+						</select>
+					<?php
+					}
+					else
+					{
+					?>
+						<select class="form-control select" name="slckota" id="slckota" onchange="showKecamatan()">
+						<option value="">Pilih Kota : </option>
+						</select>
+					<?php
+					}
+					?>
+				</div>
+
+                                                    <span class="help-block">Pilih Kota</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Kecamatan</label>
+                                                <div class="col-md-9">                                                                                            
+                                                    <div id="kecamatan">
+					<?php
+					if(isset($rsprf['noid']))
+					{
+					?>
+						<select class="form-control select" name="slckecamatan" id="slckecamatan" onchange="showDesa()">
+							<option value="">Pilih Kecamatan : </option>
+							<?php
+								$sqlcity = "SELECT kecamatan.kecamatan FROM kota,kecamatan WHERE kota.kota_id = kecamatan.kota_id and kota.kota=\"".$rsprf['kota']."\" order by kecamatan";
+								$execity = mysqli_query($conn,$sqlcity);
+								while($rscity = $execity->fetch_assoc())
+								{
+									if($rscity['kecamatan']==$rsprf['kecamatan'])
+									{
+										$selected = "SELECTED";
+									}
+									else
+									{
+										$selected = "";
+									}
+									?>
+									<option <?=$selected?> value="<?=$rscity['kecamatan']?>"><?=$rscity['kecamatan']?></option>
+									<?php
+								}
+							?>
+						</select>
+					<?php
+					}
+					else
+					{
+					?>
+						<select class="form-control select" name="slckecamatan" id="slckecamatan" onchange="showDesa()">
+						<option value="">Pilih Kecamatan : </option>
+						</select>
+					<?php
+					}
+					?>
+				</div>
+                                                    <span class="help-block">Pilih Kecamatan</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Alamat</label>
+                                                <div class="col-md-9 col-xs-12">                                            
+                                                    <textarea name="txtalamat" class="form-control" rows="5"><?=$rsprf['noid']!=""?$rsprf['alamat']:""?></textarea>
+                                                    <span class="help-block">Alamat lengkap Anda</span>
+                                                </div>
+                                            </div>
+                                            
+
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Tanggal Lahir</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                        <input type="text" class="form-control datepicker" name="txttgllahir" value="<?=$rsprf['noid']!=""?$rsprf['tgllhr']:""?>">                                            
+                                                    </div>
+                                                    <span class="help-block">Tanggal Lahir Anda (Format YYYY-MM-DD)</span>
+                                                </div>
+                                            </div>
+                                                                                        
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Agama</label>
+                                                <div class="col-md-9">                                                                                            
+                                                    <select class="form-control select" name="slcagama" id="slcagama">
+                                                        <option VALUE="Islam" <?=$rsprf['agama']=="Islam"?" SELECTED ":""?> >Islam</option>
+                                                        <option VALUE="Kristen" <?=$rsprf['agama']=="Kristen"?" SELECTED ":""?> >Kristen</option>
+                                                        <option VALUE="Katholik" <?=$rsprf['agama']=="Katholik"?" SELECTED ":""?> >Katholik</option>
+                                                        <option VALUE="Hindu" <?=$rsprf['agama']=="Hindu"?" SELECTED ":""?> >Hindu</option>
+                                                        <option VALUE="Budha" <?=$rsprf['agama']=="Budha"?" SELECTED ":""?> >Budha</option>
+                                                    </select>
+                                                    <span class="help-block">Agama Anda</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Jenis Kelamin</label>
+                                                <div class="col-md-9">                                                                                            
+                                                    <select class="form-control select" name="slcjkel">
+                                                        <option VALUE="L" <?=$rsprf['lp']=="L"?" SELECTED ":""?> >Pria</option>
+                                                        <option VALUE="P" <?=$rsprf['lp']=="P"?" SELECTED ":""?> >Wanita</option>
+                                                    </select>
+                                                    <span class="help-block">Jenis Kelamin Anda</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Telepon</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-phone-alt"></span></span>
+                                                        <input type="text" class="form-control" name="txttelp" value="<?=$rsprf['noid']!=""?$rsprf['telp']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Nomor telepon rumah</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">HP</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                                                        <input type="text" class="form-control" name="txthp" value="<?=$rsprf['noid']!=""?$rsprf['hp']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Nomor telepon seluler</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">E-Mail</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                                        <input type="text" class="form-control" name="txtemail" value="<?=$rsprf['noid']!=""?$rsprf['email']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Alamat e-mail Anda</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">BANK</label>
+                                                <div class="col-md-9">                                                                                            
+ 						<select class="form-control select" name="slcbank" id="slcbank" >
+							<option value="">Pilih Bank : </option>
+							<?php
+								$sqlbank = "SELECT * from bank ";
+								$exebank = mysqli_query($conn,$sqlbank);
+								while($rsbank = $exebank->fetch_assoc())
+								{
+									if($rsbank['namabank']==$rsprf['bank'])
+									{
+										$selected = "SELECTED";
+									}
+									else
+									{
+										$selected = "";
+									}
+									?>
+									<option <?=$selected?> value="<?=$rsbank['namabank']?>"><?=$rsbank['namabank']?></option>
+									<?php
+								}
+							?>
+						</select>
+                                                    <span class="help-block">Bank</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Nomor Rekening</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-dollar"></span></span>
+                                                        <input type="text" class="form-control" name="txtnorek" value="<?=$rsprf['noid']!=""?$rsprf['norek']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Nomor Rekening</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Atas Nama</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-money"></span></span>
+                                                        <input type="text" class="form-control" name="txtan" value="<?=$rsprf['noid']!=""?$rsprf['atasnama']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Atas Nama Rekening</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Password</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-money"></span></span>
+                                                        <input type="text" class="form-control" name="txtpw" readonly value="<?=$rsprf['noid']!=""?$rsprf['pw']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Password login</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Upline</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-money"></span></span>
+                                                        <input type="text" class="form-control" name="txtupl" readonly value="<?=$rsprf['noid']!=""?$rsprf['upline']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Anggota yang menjadi upline di pohon jaringan</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Sponsor</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-money"></span></span>
+                                                        <input type="text" class="form-control" name="txtspon" readonly value="<?=$rsprf['noid']!=""?$rsprf['sponsor']:""?>"/>
+                                                    </div>                                            
+                                                    <span class="help-block">Anggota yang mensponsori</span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    <button class="btn btn-default" type="reset" onclick="window.location.href='.?p=lapmember'">Batal</button>                                    
+                                    <button class="btn btn-primary pull-right">Simpan</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                        </div>
+                    </div>                    
+
+					

@@ -1,0 +1,1 @@
+<img width="100%" src="../img/<?=$_POST['slcposisi']?>.png" />

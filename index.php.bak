@@ -1,0 +1,75 @@
+<?php 
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- META SECTION -->
+        <title>sjn58.com</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- END META SECTION -->
+        
+        <link rel="icon" href="img/logo-small.png" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="css/revolution-slider/extralayers.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/revolution-slider/settings.css" media="screen" />
+        
+        <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />                  
+        <link rel="stylesheet" type="text/css" href="css/ckeditor5.css" media="screen" />                  
+        <link rel="stylesheet" type="text/css" href="css/course_responsive.css" media="screen" />                  
+        <link rel="stylesheet" type="text/css" href="css/owl/owl.carousel.min.css" media="screen" />
+
+    </head>
+    <body>
+        <!-- page container -->
+        <div class="page-container">
+            
+            <!-- page header -->
+            <div class="page-header">
+                
+			<?php 
+			include("header.php");
+			?>                
+
+            </div>
+            <!-- ./page header -->
+            
+            <!-- page content -->
+            <div class="page-content">
+                
+			<?php 
+			include("pages.php");
+			?>
+
+            </div>
+            <!-- ./page content -->
+            
+            <!-- page footer -->
+            <div class="page-footer">
+                
+			<?php 
+			include("footer.php");
+			?>
+                
+            </div>
+            <!-- ./page footer -->
+ 
+			<div id="appenddedForm"></div>
+
+		</div>        
+        <!-- ./page container -->
+        
+        <!-- page scripts -->
+		<?php 
+		include("scripts.php");
+		?>
+        <!-- ./page scripts -->
+    </body>
+</html>
+
+
+
+
+
+

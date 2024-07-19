@@ -1,0 +1,32 @@
+                            <div class="widget widget-default widget-carousel">
+                                <div class="owl-carousel" id="owl-example">
+
+<?php 
+$sql="SELECT * FROM vwbonussummary WHERE noid='".$_SESSION['ivetpaneluser']."'";
+
+require_once("../include/koneksi.php");
+$rssql=mysqli_query($conn,$sql)or die(mysqli_error($conn));
+$total=0;
+while($data = $rssql->fetch_assoc()){
+?>
+                                    <div>
+                                        <div class="widget-title"><?=$data['ket']?></div>                                                                        
+                                        <div class="widget-subtitle"></div>
+                                        <div class="widget-int"><?=number_format($data['bonus'])?></div>
+                                    </div>
+<?php
+	$total=$total+$data['bonus'];
+}
+
+?>
+                                    <div>
+                                        <div class="widget-title">TOTAL BONUS</div>
+                                        <div class="widget-subtitle">bonus sponsor yang dibagikan</div>
+                                        <div class="widget-int"><?=number_format($total)?></div>
+                                    </div>
+
+                                </div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                             
+                            </div>         

@@ -1,0 +1,60 @@
+        <script type="text/javascript" src="js/plugins/nvd3/lib/d3.v3.js"></script>        
+        <script type="text/javascript" src="js/plugins/nvd3/nv.d3.min.js"></script>
+<script>
+
+
+//--------------------start graph
+
+var nvd3Charts = function() {
+
+    function statBonus() {
+        return JSON.parse($.ajax({
+            dataType: "text",
+            async: false,
+            url: 'jsone.php?t=vwbonussummary&w=noid&search=<?=$_SESSION['ivetpaneluser']?>&f=f'  
+            }).responseText);
+    }
+
+
+    var myColors = ["#33414E","#8DCA35","#00BFDD","#FF702A","#DA3610",
+                    "#80CDC2","#A6D969","#D9EF8B","#FFFF99","#F7EC37","#F46D43",
+                    "#E08215","#D73026","#A12235","#8C510A","#14514B","#4D9220",
+                    "#542688", "#4575B4", "#74ACD1", "#B8E1DE", "#FEE0B6","#FDB863",                                                
+                    "#C51B7D","#DE77AE","#EDD3F2"];
+    d3.scale.myColors = function() {
+        return d3.scale.ordinal().range(myColors);
+    };
+
+    var chartstatBonus = function() {
+
+        nv.addGraph(function() {
+
+            var chart = nv.models.pieChart().x(function(d) {
+                return d.ket;
+            }).y(function(d) {
+                return d.bonus;
+            }).showLabels(true).color(d3.scale.myColors().range());;
+
+            d3.select("#chartBonus svg").datum(statBonus()).transition().duration(350).call(chart);
+
+            return chart;
+        });
+
+    };
+
+
+
+    return {        
+        init : function() {
+
+            chartstatBonus();
+        }
+    };
+}();
+
+nvd3Charts.init();
+
+$(document).ready(function() {
+    $('#TableBonus').DataTable({"pageLength": 10});
+} );
+</script>

@@ -1,0 +1,12 @@
+<?php
+	$rslt="";
+	if(isset($_POST['txtkdbrg']))
+	{
+		$SQLQry="call spProdukSave ('".$_POST['txtkdbrg']."','".$_POST['txtnama']."','".$_POST['txtharga']."','".$_POST['txthargabl']."','".$_POST['chkdaftar']."','".$_POST['chkkhusus']."','".$_POST['chkpublik']."','".$_SESSION['ivetpaneluser']."');";
+		//echo $SQLQry;
+		$RSQry=mysqli_query($conn,$SQLQry) or die(mysqli_error($conn));
+		$rs=$RSQry->fetch_row();
+		$rslt=$rs[0];		
+	}
+	echo $rslt;
+?>

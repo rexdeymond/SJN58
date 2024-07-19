@@ -1,0 +1,12 @@
+<?php
+	$rslt="";
+	if(isset($_POST['txtrp']))
+	{
+		$SQLQry="call spWidrawSave ('".$_POST['txttgl']."','".$_POST['slcbank']."','".$_POST['txtnorek']."','".$_POST['txtan']."','".$_POST['txtrp']."','".$_SESSION['ivetpaneluser']."');";
+		//echo $SQLQry;
+		$RSQry=mysqli_query($conn,$SQLQry) or die(mysqli_error($conn));
+		$rs=$RSQry->fetch_row();
+		$rslt=$rs[0];		
+	}
+	echo $rslt;
+?>

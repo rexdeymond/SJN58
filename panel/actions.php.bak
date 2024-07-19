@@ -1,0 +1,30 @@
+<?php
+session_start();
+date_default_timezone_set('Asia/Jakarta');
+include("../include/koneksi.php");
+$act=$_GET['a'];
+$actionsPath="actions";
+//echo "$actionsPath/$act.php";
+//===>>Login----------------------------------------------------------------------------------------------------------------------
+if ($act=="login")
+{
+	include("$actionsPath/login.php");
+}
+//===>>Logout---------------------------------------------------------------------------------------------------------------------
+elseif ($act=="logout")
+{
+	session_destroy();
+	setcookie("ivetpaneluser", "", time() - 3600);
+	header("Location:.");
+}
+//===>>Pendaftaran boleh tanpa login
+elseif ($act=="memberdaftar")
+{
+	include("$actionsPath/$act.php");
+}
+else
+	// DEVELOPMENT ONLY --- VULNERABLE TO INJECTION
+	if(file_exists("$actionsPath/$act.php")&&$_SESSION['ivetpaneluser']){
+		include("$actionsPath/$act.php");
+	}
+?>

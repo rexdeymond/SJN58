@@ -1,0 +1,64 @@
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><strong>Provit </strong> Sharing Group dan Sharing Global</h3>
+					<ul class="panel-controls">
+						<li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+						<li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
+						<li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+					</ul>
+				</div>
+				<div class="panel-body table-responsive">                                                                        
+
+					<p>Status Bonus Provit Sharing</p>
+					<table class="table datatable table-striped table-hover dt-responsive display nowrap" id="TablePasangan">
+						<thead>
+							<tr align="center">
+								<th rowspan="2">No</th>
+								<th rowspan="2">Tanggal</th>
+								<th colspan="2">Referensi</th>
+								<th rowspan="2">Bonus</th>
+								<th rowspan="2">Keterangan</th>
+							</tr>
+							<tr align="center">
+								<th>NOID</th>
+								<th>Nama</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php
+$sql="SELECT noid,fnGetMemberNama(noid) nama,tanggal,ref,fnGetMemberNama(ref) namaref,bonus,fnGetMemberKodeLvl(noid) kodelvl,ket FROM `bprosharing` where noid='".$_SESSION['sjn58']."'";
+
+require_once("../include/koneksi.php");
+$rssql=mysqli_query($conn,$sql)or die(mysqli_error($conn));
+$nosp=0;$tbprov=0;
+while($rsprov = $rssql->fetch_assoc())
+{$nosp++;
+?>
+							<tr>
+								<td><?=$nosp?></td>
+								<td><?=$rsprov['tanggal']?></td>
+								<td><?=$rsprov['ref']?></td>
+								<td><?=$rsprov['namaref']?></td>
+								<td align="right"><?=number_format($rsprov['bonus'])?></td>
+								<td><?=$rsprov['ket']?></td>
+							</tr>
+<?php 
+$tbprov+=$rsprov['bonus'];
+$ukdlvl=$rsprov['kodelvl'];
+}
+?>
+						</tbody>
+						<tfoot style="font-weight:bold;">
+							<tr align="center">
+								<td colspan="3">Total<td>
+								<td align="right"><?=number_format($tbprov)?></td>
+							</tr>
+						</tfoot>
+					</table>                                
+ 
+
+				</div>
+				<div class="panel-footer">
+					<button class="btn btn-primary pull-right" onclick="Jaring('<?=$ukdlvl?>')">Tampilkan Jaringan</button>
+				</div>
+</div>
