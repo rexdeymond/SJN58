@@ -13,6 +13,11 @@
     # pkgs.nodePackages.nodemon
   ];
 
+services.mysql = {
+  enable = true;
+  package = pkgs.mariadb;
+};
+
   # Sets environment variables in the workspace
   env = {};
   idx = {
