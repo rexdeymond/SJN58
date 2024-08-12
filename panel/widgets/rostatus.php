@@ -14,18 +14,11 @@ while($data = $rssql->fetch_assoc()){
 	$tbonus=$data['pending']+$data['bonus'];
 	$robln=$data['robln'];
 	if($tbonus>0){ 
-	?>                         <div class="widget widget-default widget-carousel" style="min-height: 1px;<?=$robln==0?"background: linear-gradient(to bottom, #ff0000 0%, #f5f5f5 100%);":"background: linear-gradient(to bottom, #00ff00 0%, #ffff00 100%);"?>">
-                                <div class="owl-carousel" id="owl-example">
-
-                                    <div <?=$robln==0?("title='Klik untuk belanja' style='cursor: pointer;' onclick='ModalRO(&quot;".$unoid."&quot;)'"):"" ?> >
-                                        <div class="widget-title"><?=$robln==0?(" Bonus anda bulan ini Rp. ".number_format($pending)." masih ditahan."):("Anda mendapatkan bonus Rp. ".number_format($tbonus)." bulan ini.")?></div>                                                                        
-                                        <div class="widget-subtitle"><?=$robln==0?("Anda belum belanja bulan ini silahkan melakukan pembelanjaan agar bonus pending Rp. ".number_format($pending)." dapat keluar"):("Terimakasih sudah melakukan belanja bulan ini")?></div>
-                                    </div>
-                                </div>
-                                <div class="widget-controls">                                
-                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
-                                </div>                             
-                            </div>
-							<?php
-	}
+	?>         
+        <div <?=$robln==0?("title='Klik untuk belanja' style='cursor: pointer;' onclick='ModalRO(&quot;".$unoid."&quot;)'"):"" ?>>
+            <?=$robln==0?(" Bonus anda bulan ini Rp. ".number_format($pending)." masih ditahan."):("Anda mendapatkan bonus Rp. ".number_format($tbonus)." bulan ini.")?>                                                                       
+            <?=$robln==0?("Anda belum belanja bulan ini silahkan melakukan pembelanjaan agar bonus pending Rp. ".number_format($pending)." dapat keluar"):("Terimakasih sudah melakukan belanja bulan ini")?>
+        </div>
+	<?php
+	} else {include("$widgetsPath/prestasi.php");}
 	}?>

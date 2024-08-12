@@ -1,6 +1,8 @@
 <?php 
 
-$sql="SELECT noid,nama,kota,propinsi,tgldaftar,fnGetMemberSponsorCount(noid) sponsor,fnGetMemberPresenterCount(noid) presenter FROM member WHERE noid<>'G-24040001' ORDER BY sponsor DESC,presenter DESC,tgldaftar desc LIMIT 3";
+$sql="SELECT noid,nama,kota,propinsi,tgldaftar,fnGetMemberSponsorCount(noid) sponsor,fnGetMemberPresenterCount(noid) presenter 
+        FROM member WHERE noid<>'SJ24000001' 
+        ORDER BY sponsor DESC,presenter DESC,tgldaftar desc LIMIT 4";
 ?>
                          <div class="widget widget-default widget-carousel">
                                 <div class="owl-carousel" id="owl-example">
@@ -12,9 +14,9 @@ while($data = $rssql->fetch_assoc()){
 	$sponsor=$data['sponsor'];$presenter=$data['presenter'];
 	$nama=$data['nama'];?>
                                     <div>
-                                        <div class="widget-title">TOP LEADER #<?=$i?></div>                                                                        
-                                        <div class="widget-subtitle">Jumlah sponsor <?=$sponsor?> Orang, Jumlah Presenter <?=$presenter?> Orang</div>
-                                        <div class="widget-title"><?=$nama?></div>
+                                        <div class="widget-title">TOP LEADER SJN58</div>                                                                        
+                                        <div class="widget-title"> <?=$i?>. <?=$nama?></div>
+                                        <div class="widget-subtitle">berhasil <b>sponsor <?=$sponsor?></b> member, dan <b>Presenter <?=$presenter?></b> member</div>
                                     </div>
 <?php
 	$i++;

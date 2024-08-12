@@ -61,14 +61,16 @@ mysqli_free_result($rsUser);
                 
                 <!-- PAGE CONTENT WRAPPER -->
                 <div class="page-content-wrap">
+                    <div class="row">
                     
-					<?php
-					//<!-- START CONTENT -->                    
-					include("contents.php");
-					//<!-- END CONTENT -->                    
-					?>
-					<div id="appenddedForm"></div>
+    					<?php
+    					//<!-- START CONTENT -->                    
+    					include("contents.php");
+    					//<!-- END CONTENT -->                    
+    					?>
+    					<div id="appenddedForm"></div>
                                         
+                    </div>
                 </div>
                 <!-- END PAGE CONTENT WRAPPER -->                                
             </div>            

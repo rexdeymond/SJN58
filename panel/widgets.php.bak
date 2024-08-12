@@ -1,0 +1,27 @@
+<?php 
+$widgetsPath="widgets";
+?>
+                    <div class="row">
+                        <div class="col-md-12"><?php include("$widgetsPath/prestasi2.php"); ?></div>
+                        <div class="col-md-12"><?php include("$widgetsPath/leader.php"); ?></div>
+                        <div class="col-md-12"><?php include("$widgetsPath/memberin.php"); ?></div>
+                        <div class="col-md-12">
+                            
+                            <!-- START WIDGET SLIDER -->
+							<?php
+								include("$widgetsPath/bonus.php");
+							?>
+                           <!-- END WIDGET SLIDER -->
+                            
+                        </div>
+                        <!--div class="col-md-12">
+                            
+                            <!-- START WIDGET MESSAGES -->
+ 							<?php 
+								// include("$widgetsPath/member.php");
+							?>
+                            <!-- END WIDGET MESSAGES -->
+                            
+                        </div-->
+                    </div>
+ 

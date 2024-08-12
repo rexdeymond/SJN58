@@ -9,14 +9,25 @@ $sqlmem = "SELECT *,fnGetMemberTotBonus(noid) totbonus,fnGetMemberTotWidraw(noid
 $rsmem = mysqli_query($conn,$sqlmem);
 $member = $rsmem->fetch_assoc();
 
-$sqlwd = "SELECT * FROM bwidraw where tanggal='".$tgl."' AND noid='".$_SESSION['sjn58']."' AND (status=2 or status=3) ";
+$qpres = "SELECT bonus FROM bprestasi WHERE noid='".$_SESSION['sjn58']."' ";
+$rspres = mysqli_query($conn,$qpres);
+$bpres = $rspres->fetch_assoc();
+
+$sqlwd = "SELECT * FROM bwidraw where tanggal='".$tgl."' AND noid='".$_SESSION['sjn58']."' AND (status=2 or status=3) AND ket NOT IN ('Bonus Prestasi Periode JULI 2024')";
 $rswd = mysqli_query($conn,$sqlwd);
 $wd = $rswd->fetch_assoc();
+
+$sqlpres="SELECT sp.noid as NoID, fnGetMemberNama(sp.noid) as Nama, COUNT(sp.ref) as TTl FROM bsponsor as sp
+            LEFT JOIN pin ON pin.kdbrg = 'MBN' AND sp.noid = pin.noid
+        WHERE sp.tanggal >= '2024-07-01' AND sp.tanggal <= '2024-07-31' AND pin.noid IS NOT NULL
+        GROUP BY sp.NOID ORDER BY TTl DESC, sp.tanggal DESC LIMIT 9";
+$rssti = mysqli_query($conn,$sqlpres);
+$pres = $rssti->fetch_assoc(); IF ($pres['TTl']>4) {$bnsp='1';} ELSE {$bnsp='0';}
 
 $bank=$wd['bank']!=''?$wd['bank']:$member['bank'];
 $rek=$wd['norek']!=''?$wd['norek']:$member['norek'];
 $atasnama=$wd['atasnama']!=''?$wd['atasnama']:$member['atasnama'];
-$totbonus=$member['totbonus'];$totwidraw=$member['totwidraw'];
+$totbonus=$member['totbonus'] + $bnsp + $bpres['bonus'];$totwidraw=$member['totwidraw'];
 $maxwd=$totbonus-$totwidraw;
 ?>
 

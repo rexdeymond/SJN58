@@ -1,0 +1,34 @@
+<?php 
+
+//$sql="SELECT noid,nama,kota,propinsi,tgldaftar,fnGetMemberSponsorCount(noid) sponsor,fnGetMemberPresenterCount(noid) presenter FROM member WHERE noid<>'G-24040001' ORDER BY sponsor DESC,presenter DESC,tgldaftar desc LIMIT 3";
+
+$sql="SELECT m.noid AS NoID, m.nama AS nama, COUNT(DISTINCT sp.ref) AS qsp, COUNT(DISTINCT pr.ref) AS qpr
+        FROM member m
+            LEFT JOIN bsponsor sp ON m.noid = sp.noid AND MONTH(sp.tanggal) = MONTH(CURRENT_DATE()) AND YEAR(sp.tanggal) = YEAR(CURRENT_DATE())
+            LEFT JOIN bpresenter pr ON m.noid = pr.noid AND MONTH(pr.tanggal) = MONTH(CURRENT_DATE()) AND YEAR(pr.tanggal) = YEAR(CURRENT_DATE())
+        GROUP BY m.noid
+        ORDER BY (COUNT(DISTINCT sp.ref) + COUNT(DISTINCT pr.ref)) ASC LIMIT 5";
+?>
+                         <div class="widget widget-default widget-carousel">
+                                <div class="owl-carousel" id="owl-example">
+<?php
+require_once("../include/koneksi.php");
+$i=1;
+$rssql=mysqli_query($conn,$sql)or die(mysqli_error($conn));
+while($data = $rssql->fetch_assoc()){
+	$sponsor=$data['qsp'];$presenter=$data['qpr']; $noid=$data['NoID']; $nama=$data['nama']; 
+	if ($sponsor > 0 || $presenter > 0) {?>
+                                    <div>
+                                        <div class="widget-title">TOP LEADER #<?=$i?></div>
+                                        <div class="widget-title"><?=$nama?></div>
+                                        <div class="widget-subtitle">Sponsor-in <?=$sponsor?> Member,<br> Presenter-in <?=$presenter?> Member</div>
+                                    </div>
+<?php
+	$i++; } else { echo    '<div> 
+	                            <div class="widget-title">TOP LEADER #</div>
+                                <div class="widget-subtitle">Belum ada TOP Leader Bulan ini</div>
+                            </div>' ;}
+}?>
+                                </div>
+                             
+                            </div>

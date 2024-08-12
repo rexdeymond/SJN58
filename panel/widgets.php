@@ -2,11 +2,36 @@
 $widgetsPath="widgets";
 ?>
                     <div class="row">
-                        <div class="col-md-12">
- 							<?php 
-								include("$widgetsPath/rostatus.php");
-							?>
-						</div>
+                        <div class="col-md-12" style="margin-bottom: 20px; background: rgb(60,75,180);
+                                    background: linear-gradient(90deg, rgba(60,75,180,1) 16%, rgba(30,140,240,0.9) 50%, rgba(90,65,250,0.9) 100%);">
+                            <div class="row" style="background-color: rgba(50, 50, 50, 0.7);">
+                                <div class="col-md-8 panel-body">
+                            		<h3 style="font-family:'Courier New';color:white;">
+                            			<strong>Informasi</strong>
+                            			<span class="pull-right"><?= date('d-m-Y H:i:s'); ?></span>
+                            	    </h3>
+                                    <marquee style="font-family:'Courier New'; color:white; font-size:20px">
+                                            <?php include("$widgetsPath/rostatus.php");?>
+                                    </marquee>
+                            	</div>
+                                <div class="col-md-4 panel-body">
+                                    <div class="btn-group btn-group-justified">
+                                        <a type="button" class="btn btn-lg btn-default" href="#" onclick="ModalRO('<?=$unoid?>')">
+                                            <i class="fa fa-shopping-cart" style="font-size : 20px;"></i><br>
+                                            <span class="text-small">RO</span>
+                                        </a>
+                                        <a type="button" class="btn btn-lg btn-default" href="#" onclick="ModalDaftar(4)">
+                                            <i class="fa fa-user" style="font-size : 20px;"></i> <br>
+                                            <span class="text-left text-small">Mendaftar</span>
+                                        </a>
+                                        <a type="button" class="btn btn-lg btn-default" href=".?p=widraw">
+                                            <i class="fa fa-usd" style="font-size: 20px;"></i> <br>
+                                            <span style="text-align: left; font-size: 14px;">Tarik Dana</span> 
+                                        </a>
+                                    </div>
+                            	</div>     
+                            </div>
+                        </div> 
 					</div>
                     <div class="row">
                         <div class="col-md-3">
@@ -38,26 +63,9 @@ $widgetsPath="widgets";
                         </div>
                         <div class="col-md-3">
                             
-                            <!-- START WIDGET CLOCK -->
-                            <div class="widget widget-danger widget-padding-sm">
-                                <div class="widget-big-int plugin-clock">00:00</div>                            
-                                <div class="widget-subtitle plugin-date">Loading...</div>
-                                <div class="widget-controls">                                
-                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="left" title="Remove Widget"><span class="fa fa-times"></span></a>
-                                </div>                            
-                                <div class="widget-buttons widget-c3">
-                                    <div class="col" title='Belanja'>
-                                        <a href="#" onclick="ModalRO('<?=$unoid?>')" ><span class="fa fa-shopping-cart"></span></a>
-                                    </div>
-                                    <div class="col" title='Daftarkan member'>
-                                        <a href="#" onclick="ModalDaftar(4)" ><span class="fa fa-user"></span></a>
-                                    </div>
-                                    <div class="col" title='Penarikan Dana'>
-                                        <a href=".?p=widraw" ><span class="fa fa-usd"></span></a>
-                                    </div>
-                                </div>                            
-                            </div>                        
-                            <!-- END WIDGET CLOCK -->
+							<?php 
+								include("$widgetsPath/prestasi2.php");
+							?>
                             
                         </div>
                     </div>
